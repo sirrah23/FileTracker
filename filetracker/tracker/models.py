@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class FileEntity(models.Model):
@@ -7,6 +8,9 @@ class FileEntity(models.Model):
     """
     name = models.CharField(max_length=200,
                             help_text="Enter a file name")
+
+    def get_absolute_url(self):
+        return reverse('file-entity-detail', args=[str(self.id)])
 
     def __str__(self):
         return self.name
@@ -22,7 +26,8 @@ class FileHistory(models.Model):
 
     file_entity = models.ForeignKey('FileEntity',
                                     on_delete=models.CASCADE,
-                                    null=False)
+                                    null=False,
+                                    related_name='history')
 
     client_modified = models.DateField(null=True,
                                        blank=True)

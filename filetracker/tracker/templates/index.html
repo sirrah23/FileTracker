@@ -1,0 +1,12 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>File Tracker</h1>
+    <p>Welcome to <i>File Tracker</i>, the place where you can track specific files
+    from your Dropbox account!</p>
+    <ul>
+        {% for file_entity in file_entity_list %}
+            <a href="{{file_entity.get_absolute_url}}" ><li>{{file_entity.name}}</li></a>
+        {% endfor %}
+    </ul>
+{% endblock %}

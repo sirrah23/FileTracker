@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import FileEntity, FileHistory
 
-# Register your models here.
+
+admin.site.register(FileEntity)
+admin.site.register(FileHistory)
