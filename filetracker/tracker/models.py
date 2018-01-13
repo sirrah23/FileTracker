@@ -1,8 +1,41 @@
 from django.db import models
 
-class File(models.Model):
-    pass
+
+class FileEntity(models.Model):
+    """
+    Model containing the list of files that are being tracked
+    """
+    name = models.CharField(max_length=200,
+                            help_text="Enter a file name")
+
+    def __str__(self):
+        return self.name
 
 
-class FileChange(models.Models):
-    pass
+class FileHistory(models.Model):
+
+    FILE_STATUS = (
+        ('n', 'Non-existent'),
+        ('t', 'Tracked'),
+        ('m', 'Modified')
+    )
+
+    file_entity = models.ForeignKey('FileEntity',
+                                    on_delete=models.CASCADE,
+                                    null=False)
+
+    client_modified = models.DateField(null=True,
+                                       blank=True)
+
+    server_modified = models.DateField(null=True,
+                                       blank=True)
+
+    content_hash = models.CharField(max_length=200,
+                                    null=True,
+                                    blank=True)
+
+    status = models.CharField(max_length=1,
+                              choices=FILE_STATUS,
+                              blank=True,
+                              default='m',
+                              help_text='Status of the file')
