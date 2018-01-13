@@ -4,9 +4,13 @@
     <h1>File Tracker</h1>
     <p>Welcome to <i>File Tracker</i>, the place where you can track specific files
     from your Dropbox account!</p>
+    {% if file_entity_list %}
     <ul>
         {% for file_entity in file_entity_list %}
             <a href="{{file_entity.get_absolute_url}}" ><li>{{file_entity.name}}</li></a>
         {% endfor %}
     </ul>
+    {% else %}
+        <p>No files to show</p>
+    {% endif %}
 {% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>File Tracker</h1>
+    <h2>{{file_entity.name}}</h2>
+    <h3>Modifications</h3>
+    {% for history in file_entity.history.all %}
+    <ul>
+        <li><b>Status:</b> {{history.get_status_display}}</li>
+        {% if history.status != 'n' %}
+        <li><b>Client Modified:</b> {{history.client_modified}}</li>
+        <li><b>Server Modified:</b> {{history.server_modified}}</li>
+        <li><b>Content Hash:</b> {{history.content_hash}}</li>
+        {% endif %}
+    </ul>
+    {% endfor %}
+{% endblock %}

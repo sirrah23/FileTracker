@@ -13,3 +13,5 @@ class FileEntityListView(generic.ListView):
 
 class FileEntityDetailView(generic.DetailView):
     model = FileEntity
+    context_object_name = "file_entity"
+    template_name = "file-entity-detail.html"
