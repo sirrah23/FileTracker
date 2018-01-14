@@ -9,6 +9,7 @@ verify_ssl = true
 
 django = "*"
 dropbox = "*"
+celery = "*"
 
 
 [dev-packages]
