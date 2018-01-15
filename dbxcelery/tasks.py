@@ -4,6 +4,7 @@ import os
 import configparser
 import django
 from celery import Celery
+from celery.schedules import crontab
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "filetracker"))
 sys.path.insert(0, os.path.dirname(__file__))
@@ -29,6 +30,22 @@ app = Celery('tasks', broker=BROKER_URL)
 TOKEN = config['Dropbox']['API_TOKEN']
 repo = DBXRepo(TOKEN)
 
+@app.on_after_configure.connect
+def setup_periodic_tasks(sender, **kwargs):
+    sender.add_periodic_task(float(config['Dropbox']['Refresh_Rate']),
+                             refresh_file_metadata.s())
+
+@app.task
+def refresh_file_metadata():
+    """
+    Checks all files we are tracking in Dropbox to see if any of them
+    have changed and if so, updates them
+    """
+    print("Starting metadata refresh")
+    all_files = FileEntity.objects.all()
+    print("Refresh {} files", all_files.count())
+    for f in all_files:
+        update_file_metadata(f.name)
 
 @app.task
 def update_file_metadata(f):
