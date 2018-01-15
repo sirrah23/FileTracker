@@ -18,7 +18,7 @@ class FileEntity(models.Model):
     status = models.CharField(max_length=1,
                               choices=FILE_STATUS,
                               blank=True,
-                              default='m',
+                              default='n',
                               help_text='Status of the file')
 
     def get_absolute_url(self):

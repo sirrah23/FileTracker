@@ -5,6 +5,11 @@ from .forms import NewFileEntityForm
 from django.views import generic
 from .models import FileEntity
 
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
+from dbxcelery.tasks import update_file_metadata
+
 
 class FileEntityListView(generic.ListView):
     # TODO: Access the foreign FileHistory data
@@ -22,11 +27,11 @@ class FileEntityDetailView(generic.DetailView):
 
 def FileEntityNew(request):
     if request.method == 'POST':
-        print("Post has been seen!")
         form = NewFileEntityForm(request.POST)
         if form.is_valid():
             fe = FileEntity(name=form.cleaned_data['name'])
             fe.save()
+            update_file_metadata.delay(form.cleaned_data['name'])
             return HttpResponseRedirect(reverse('index'))
     else:
         form = NewFileEntityForm()

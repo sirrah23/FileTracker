@@ -5,8 +5,8 @@ import configparser
 import django
 from celery import Celery
 
-sys.path.insert(0, os.path.abspath("./filetracker"))
-sys.path.insert(0, os.path.abspath("."))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "filetracker"))
+sys.path.insert(0, os.path.dirname(__file__))
 # Dropbox
 from dbxconn.dbxconn import DBXRepo
 
@@ -17,7 +17,7 @@ from tracker.models import FileHistory, FileEntity
 
 # TODO: Move this somewhere else
 config = configparser.ConfigParser()
-config.read(os.path.abspath('./config.ini'))
+config.read(os.path.join(os.path.dirname(__file__), '..', 'config.ini'))
 
 # Celery application
 BROKER_URL = 'amqp://{}:{}@localhost:5672/{}'.format(config['Celery']['User'],
@@ -28,11 +28,6 @@ app = Celery('tasks', broker=BROKER_URL)
 # Dropbox repository object
 TOKEN = config['Dropbox']['API_TOKEN']
 repo = DBXRepo(TOKEN)
-
-
-@app.task
-def initialize_new_file(f):
-    pass
 
 
 @app.task
