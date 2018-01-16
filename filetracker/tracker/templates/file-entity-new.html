@@ -1,7 +1,13 @@
 {% extends "base_generic.html" %}
 
-{% block content %}
+{% block header %}
     <h1>File Tracker</h1>
+{% endblock %}
+{% block sidebar %}
+    <h2> Menu </h2>
+    <a href="{% url 'index' %}">Home</a>
+{% endblock %}
+{% block content %}
     <h2>Add a new file</h2>
     <form action="", method="post">
         {% csrf_token %}

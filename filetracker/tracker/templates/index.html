@@ -1,10 +1,9 @@
 {% extends "base_generic.html" %}
 
-{% block sidebar %}
-<a href="{% url 'file-entity-new' %}">Add new file</a>
+{% block header %}
+    <h1>File Tracker</h1>
 {% endblock %}
 {% block content %}
-    <h1>File Tracker</h1>
     <p>Welcome to <i>File Tracker</i>, the place where you can track specific files
     from your Dropbox account!</p>
     {% if file_entity_list %}
@@ -16,4 +15,9 @@
     {% else %}
         <p>No files to show</p>
     {% endif %}
+{% endblock %}
+
+{% block sidebar %}
+    <h2> Menu </h2>
+    <a href="{% url 'file-entity-new' %}">Add new file</a>
 {% endblock %}
