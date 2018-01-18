@@ -85,4 +85,10 @@ def update_file_metadata(f):
 
         return "Data has been updated"
     else:
-        return "File {} does not exist in Dropbox...nothing to update".format(f)
+        if FileEntity.objects.filter(name=f).count() == 0:
+            return "File {} does not exist in Dropbox...nothing to update".format(f)
+        file_entity = FileEntity.objects.filter(name=f).first()
+        file_entity.status = 'n'
+        file_entity.save()
+        return "Data has been updated"
+
