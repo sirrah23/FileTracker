@@ -7,6 +7,7 @@ class FileEntity(models.Model):
     Model containing the list of files that are being tracked
     """
     FILE_STATUS = (
+        ('p', 'Pending'),
         ('n', 'Non-existent'),
         ('t', 'Tracked'),
         ('m', 'Modified')
@@ -18,7 +19,7 @@ class FileEntity(models.Model):
     status = models.CharField(max_length=1,
                               choices=FILE_STATUS,
                               blank=True,
-                              default='n',
+                              default='p',
                               help_text='Status of the file')
 
     def get_absolute_url(self):
