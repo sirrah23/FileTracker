@@ -53,42 +53,42 @@ def update_file_metadata(f):
     Given a filename update its modification history based on whether
     or not the file has been updated in Dropbox.
     """
-    data = repo.get_file_metadata(f)
-    if data:
-        # Get file information already in database
-        if FileEntity.objects.filter(name=f).count() == 0:
-            return "File {} does not exist...quitting".format(f)
-        else:
-            file_entity = FileEntity.objects.filter(name=f).first()
+    input_file_set = FileEntity.objects.filter(name=f)
+    if input_file_set.count() == 0:
+        return {"update": False, "message": "File {} does not exist in system".format(f)}
+    file_entity = input_file_set.first()
+
+    dboxdata = repo.get_file_metadata(f)
+    if dboxdata:
+        # Get file information already in dboxdatabase
         latest_history = None
         if file_entity.history.count() != 0:
             latest_history = file_entity.history.latest('inserted')
 
-        # Add new history object if needed
-        if latest_history and latest_history.content_hash == data.content_hash:
-            return "No updates required"
-        new_history = FileHistory(content_hash=data.content_hash,
-                                  client_modified=data.client_modified,
-                                  server_modified=data.server_modified,
+        # Create new history object if file has changed
+        if latest_history and latest_history.content_hash == dboxdata.content_hash:
+            return {"update": False,
+                    "message": "File {} has not changed".format(f)}
+        new_history = FileHistory(content_hash=dboxdata.content_hash,
+                                  client_modified=dboxdata.client_modified,
+                                  server_modified=dboxdata.server_modified,
                                   file_entity=file_entity)
 
-        # Non-existent -> Tracked
+        # Pending -> Tracked or
         # Tracked -> Modified
-        if file_entity.status == 'n':
+        if file_entity.status == 'p':
             file_entity.status = 't'
         elif file_entity.status == 't':
             file_entity.status = 'm'
 
-        # Save changes to database
+        # Save changes to dboxdatabase
         file_entity.save()
         new_history.save()
 
-        return "Data has been updated"
+        return {"update": True, "message": ""}
     else:
-        if FileEntity.objects.filter(name=f).count() == 0:
-            return "File {} does not exist in Dropbox...nothing to update".format(f)
-        file_entity = FileEntity.objects.filter(name=f).first()
+        # File Status -> Non-Existent
         file_entity.status = 'n'
         file_entity.save()
-        return "Data has been updated"
+        return {"update": "True", "message": "File {} does not exist in Dropbox".format(f)}
 

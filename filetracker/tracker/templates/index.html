@@ -9,7 +9,11 @@
     {% if file_entity_list %}
     <ul>
         {% for file_entity in file_entity_list %}
+        {% if file_entity.status == "m" %}
+            <a href="{{file_entity.get_absolute_url}}" ><li>*****{{file_entity.name}}*****</li></a>
+        {% else %}
             <a href="{{file_entity.get_absolute_url}}" ><li>{{file_entity.name}}</li></a>
+        {% endif %}
         {% endfor %}
     </ul>
     {% else %}

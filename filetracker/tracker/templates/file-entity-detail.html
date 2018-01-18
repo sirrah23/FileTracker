@@ -12,7 +12,7 @@
         <a href="{% url 'file-entity-delete' pk=file_entity.id %}">Delete</a>
     {% endblock %}
     {% block content %}
-    {% for history in file_entity.history.all %}
+    {% for history in file_entity.history.all|dictsortreversed:"inserted" %}
     <ul>
         {% if file_entity.status != 'n' %}
             <li><b>Client Modified:</b> {{history.client_modified}}</li>
