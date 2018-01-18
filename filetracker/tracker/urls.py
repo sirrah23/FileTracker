@@ -1,5 +1,4 @@
 from django.urls import path
-from django.conf.urls import url
 
 from . import views
 
@@ -12,5 +11,8 @@ urlpatterns = [
          name='file-entity-detail'),
     path('new-file',
          views.FileEntityNew,
-         name='file-entity-new')
+         name='file-entity-new'),
+    path('delete-file/<int:pk>',
+         views.FileEntityDelete.as_view(),
+         name='file-entity-delete')
 ]

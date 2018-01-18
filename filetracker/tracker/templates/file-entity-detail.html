@@ -6,6 +6,9 @@
     <h2>Status: {{file_entity.get_status_display}}</h2>
     <h3>Modifications</h3>
     {% endblock %}
+    {% block sidebar %}
+    <h2>Menu</h2>
+    {% endblock %}
     {% block content %}
     {% for history in file_entity.history.all %}
     <ul>

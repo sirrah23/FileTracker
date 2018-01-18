@@ -1,8 +1,9 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from .forms import NewFileEntityForm
 from django.views import generic
+from django.views.generic.edit import DeleteView
 from .models import FileEntity
 
 import sys
@@ -39,3 +40,9 @@ def FileEntityNew(request):
                       'file-entity-new.html',
                       {'form': form})
 
+
+class FileEntityDelete(DeleteView):
+    model = FileEntity
+    context_object_name = "file_entity"
+    template_name = "file-entity-delete.html"
+    success_url = reverse_lazy('index')
