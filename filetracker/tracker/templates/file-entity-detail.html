@@ -7,7 +7,9 @@
     <h3>Modifications</h3>
     {% endblock %}
     {% block sidebar %}
-    <h2>Menu</h2>
+        <h2>Menu</h2>
+        <a href="{% url 'index' %}">Home</a></br>
+        <a href="{% url 'file-entity-delete' pk=file_entity.id %}">Delete</a>
     {% endblock %}
     {% block content %}
     {% for history in file_entity.history.all %}
