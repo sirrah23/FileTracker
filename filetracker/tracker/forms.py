@@ -19,3 +19,11 @@ class NewFileEntityForm(forms.Form):
             raise ValidationError('File already exists in system')
 
         return data
+
+
+class FileEntityHandleForm(forms.Form):
+    """
+    This form is just a button on the UI for changing a file
+    status from Modified to Tracked.
+    """
+    pass

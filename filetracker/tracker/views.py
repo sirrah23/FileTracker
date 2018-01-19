@@ -1,8 +1,9 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
-from .forms import NewFileEntityForm
-from django.views import generic
+from .forms import NewFileEntityForm, FileEntityHandleForm
+from django.views import generic, View
+from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import DeleteView
 from .models import FileEntity
 
@@ -28,6 +29,38 @@ class FileEntityDetailView(generic.DetailView):
     model = FileEntity
     context_object_name = "file_entity"
     template_name = "file-entity-detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(FileEntityDetailView, self).get_context_data(**kwargs)
+        context['form'] = FileEntityHandleForm()
+        return context
+
+
+class FileEntityHandle(SingleObjectMixin, generic.FormView):
+    template_name = 'file-entity-detail.html'
+    form_class = FileEntityHandleForm
+    model = FileEntity
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        # Update the status of the file to tracked...no need for any validation
+        self.object.status = 't'
+        self.object.save()
+        return super(FileEntityHandle, self).post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('file-entity-detail', kwargs={'pk': self.object.pk})
+
+
+class FileEntityDetail(View):
+
+    def get(self, request, *args, **kwargs):
+        view = FileEntityDetailView.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = FileEntityHandle.as_view()
+        return view(request, *args, **kwargs)
 
 
 def FileEntityNew(request):

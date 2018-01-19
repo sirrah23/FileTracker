@@ -12,13 +12,20 @@
         <a href="{% url 'file-entity-delete' pk=file_entity.id %}">Delete</a>
     {% endblock %}
     {% block content %}
-    {% for history in file_entity.history.all|dictsortreversed:"inserted" %}
-    <ul>
-        {% if file_entity.status != 'n' %}
-            <li><b>Client Modified:</b> {{history.client_modified}}</li>
-            <li><b>Server Modified:</b> {{history.server_modified}}</li>
-            <li><b>Content Hash:</b> {{history.content_hash}}</li>
+        {% if file_entity.status == "m" %}
+            <form action="", method="post">
+                {% csrf_token %}
+                {{form}}
+                <input type="submit" value="Handle"/>
+            </form>
         {% endif %}
-    </ul>
-    {% endfor %}
-{% endblock %}
+        {% for history in file_entity.history.all|dictsortreversed:"inserted" %}
+        <ul>
+            {% if file_entity.status != 'n' %}
+                <li><b>Client Modified:</b> {{history.client_modified}}</li>
+                <li><b>Server Modified:</b> {{history.server_modified}}</li>
+                <li><b>Content Hash:</b> {{history.content_hash}}</li>
+            {% endif %}
+        </ul>
+        {% endfor %}
+    {% endblock %}

@@ -7,7 +7,7 @@ urlpatterns = [
          views.FileEntityListView.as_view(),
          name='index'),
     path('file/<int:pk>/',
-         views.FileEntityDetailView.as_view(),
+         views.FileEntityDetail.as_view(),
          name='file-entity-detail'),
     path('new-file',
          views.FileEntityNew,
