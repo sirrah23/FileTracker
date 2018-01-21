@@ -53,6 +53,14 @@ class FileEntityHandle(SingleObjectMixin, generic.FormView):
 
 
 class FileEntityDetail(View):
+    """
+    When you do a GET request it makes the FileEntityDetailView available
+    to you which presents the information associated with the current
+    FileEntity.
+
+    When you perform a POST request it allows you to update the status of the
+    particular FileEntity from Modified to Handled.
+    """
 
     def get(self, request, *args, **kwargs):
         view = FileEntityDetailView.as_view()
