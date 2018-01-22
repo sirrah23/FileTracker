@@ -1,0 +1,41 @@
+* Introduction
+Sometimes you have Dropbox files that you like to backup in other places as well
+because they are very important or you just need to know if they have changed
+recently. This web application called /FileTracker/ allows you to do just that.
+
+You can add Dropbox files here to the application and it will track them. It will
+periodically scan your Dropbox and if the files have changed they will be marked as
+such.
+
+You as the user will have the option to mark modified files as "handled" so that
+you no longer have to worry about them until they are modified again.
+
+* How to run
+** Prerequisites
+*** Installed Software
+Make sure you have the following installed:
+- [[https://github.com/pypa/pipenv][Pipenv]] 
+- [[https://www.rabbitmq.com/][RabbitMQ]]
+*** Dropbox API Token
+Create an app in the Dropbox app console and generate an API token.
+** Obtain the code
+Clone the repository by running ~git clone https://github.com/sirrah23/FileTracker.git~
+** Create a configuration file
+In the root of the project directory create a file called =config.ini=. This is
+the file that will contain your configuration data.
+
+Populate the =config.ini= file with the following information:
+
+#+BEGIN_SRC
+[Celery]
+User = <your celery username>
+Password = <your celery password>
+VHost = <your celery virtual host>
+
+[Dropbox]
+API_TOKEN = <your API token>
+Refresh_Rate = <Rate at which you want Dropbox files scanned (seconds)>
+#+END_SRC
+** Run the app
+After you have everything setup you can just run the =run.sh= script. After that
+you can navigate to =localhost:8000= in your web browser.
